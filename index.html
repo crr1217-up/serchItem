@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="demo">
+        <div class="search">
+            <input type="text" v-model="searchInfo">
+            <span 
+                v-for="(sex,index) in sexArr"
+                :class="{active:isSelect[index]}"
+                @click="changeSex(index)"
+            >{{sex}}</span>           
+        </div>
+        <ul class="users">
+            <li v-for="person in filterPerson" :keys="person.id">
+                <img :src="person.src" :alt="person.name">
+                <div class="info">
+                    <div class="name">{{person.name}}</div>
+                    <div class="des">{{person.des}}</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        const vm = new Vue({
+            el:".demo",
+            data:{
+                searchInfo:"",
+                sexArr:["Male","Female","All"],
+                isSelect:[false,false,true],
+                sexSelect:["m","f"],
+                personArr: [
+                { 
+                    name: '小黄', 
+                    src: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4005587090,2408158268&fm=26&gp=0.jpg', 
+                    des: '爱穿裙子', 
+                    sex: 'm', 
+                    id: '056482' 
+                },
+                { 
+                    name: '小强', 
+                    src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1571915784984&di=a0056fd06188e87b922c60878e5ce6e2&imgtype=0&src=http%3A%2F%2Fpic.51yuansu.com%2Fpic3%2Fcover%2F03%2F79%2F64%2F5c05df1faf3b7_610.jpg', 
+                    des: '健身达人', 
+                    sex: 'f', 
+                    id: '157894' 
+                },
+                { 
+                    name: '小莹', 
+                    src: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4005587090,2408158268&fm=26&gp=0.jpg',
+                    des: '长得很好看', 
+                    sex: 'f', 
+                    id: '2849245' 
+                },
+                { 
+                    name: '小刘', 
+                    src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1571915748758&di=5be825da4d37bcc21959946c101d5609&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201707%2F19%2F20170719211350_4PnBt.jpeg', 
+                    des: '陌生人', 
+                    sex: 'm', 
+                    id: '348515' 
+                },
+                { 
+                    name: '刘翔', 
+                    src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1571915762633&di=49517ca62ecddb638cdfb2158a64e39a&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201702%2F05%2F20170205222154_WLdJS.jpeg', 
+                    des: '奥运会', 
+                    sex: 'm', 
+                    id: '478454'
+                }
+                ],
+            },
+            methods:{
+                changeSex(index){
+                    for (let i = 0; i < this.isSelect.length; i++) {
+                        this.isSelect[i] = false;
+                    }
+                    vm.$set(this.isSelect,index,true);
+
+                    this.sexSelect.length=0;
+                    switch(index){
+                        case 0:
+                            this.sexSelect.push("m");
+                            break;
+                        case 1:
+                            this.sexSelect.push("f");
+                            break;
+                        case 2:
+                            this.sexSelect.push("m","f");
+                            break;
+                    }
+                }
+            },
+            computed:{
+                filterPerson(){
+                    // const searchInfo = this.searchInfo;
+                    const {searchInfo,sexSelect} = this;
+                    return this.personArr.filter((item)=>item.name.includes(searchInfo)&&sexSelect.includes(item.sex))
+                }
+            }
+        });
+    </script>
+</body>
+</html>
